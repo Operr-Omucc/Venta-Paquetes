@@ -1,3 +1,8 @@
+<?php
+include("includes/conexBDD.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

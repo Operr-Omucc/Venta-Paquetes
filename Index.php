@@ -1,3 +1,7 @@
+<?php
+include("includes/conexBDD.php");
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -144,7 +148,7 @@
       <a href="#">Profile</a>
      <a href="#">My Bookings</a>
      <a href="carrito.php">Carrito</a>
-      <a href="#">Logout</a>
+      <a href="login.php">Login</a>
     </div>
   </div>
 </header>
