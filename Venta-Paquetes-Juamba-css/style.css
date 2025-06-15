@@ -1,0 +1,314 @@
+/* Index */
+    /* Reset simple */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f2f5;
+      color: #333;
+    }
+    header {
+  background-color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+  gap: 15px; /* Añade espacio entre la imagen y el menú */
+}
+
+.extra-image img {
+  width: 40px;
+  height: 40px;
+}
+
+
+    /* Menú de usuario */
+    .user-menu-container {
+      position: relative;
+      cursor: pointer;
+    }
+    .user-avatar img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #023047;
+    }
+    .user-dropdown {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      width: 180px;
+      display: none;
+      font-size: 14px;
+      color: #555;
+      z-index: 1000;
+    }
+    .user-dropdown p {
+      margin: 10px;
+      font-weight: bold;
+    }
+    .user-dropdown a {
+      display: block;
+      padding: 10px;
+      color: #333;
+      text-decoration: none;
+      border-top: 1px solid #eee;
+    }
+    .user-dropdown a:hover {
+      background: #012638;
+      color: white;
+    }
+
+    /* Paquetes de viajes */
+    .main-index {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .package-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease;
+    }
+    .package-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    .package-image {
+      width: 100%;
+      height: 160px;
+      background: #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+      font-size: 18px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .package-content {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .package-title {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: #222;
+    }
+    .package-description {
+      font-size: 14px;
+      flex-grow: 1;
+      color: #666;
+    }
+    .package-button {
+      margin-top: 15px;
+      background-color: #023047;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+    .package-button:hover {
+      background-color: #012638;
+    }
+
+/*login*/
+
+a {
+  font-style: none;
+}
+
+    .header {
+  position: relative;               
+  height: 60px;
+  background-color: #012638;
+  display: flex;
+  justify-content: center;         
+  align-items: center;  
+  margin-bottom: 70px;           
+}
+
+.header .titulo {
+  color: white;
+  font-size: 24px;
+  margin: 0;
+}
+
+.boton-header {
+  position: absolute;
+  right: 20px;                     
+  top: 50%;
+  transform: translateY(-50%);     
+  background-color: #ffffff;
+  color: #2e5d9f;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+    
+    .container { margin: auto; display: flex; align-items: center; justify-content: space-evenly;
+      border-radius: 8px;}
+
+    form {
+      border: 1px solid #ccc; 
+      border-radius: 8px;
+      width: 320px; 
+      height: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    form h2 { text-align: center; color: #ccc; background-color: #023047; margin: 0; padding: 10px;}
+
+
+    label { 
+      display: block; 
+      padding: 20px;
+      display: flex; 
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .button-login {
+      background-color: #ccc;
+      margin-bottom: 0px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: space-around;
+      justify-content: space-around;
+      height: 87px;
+      border-radius: 7px;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+    }
+
+    .button-login button{
+      height: 40px;
+      background-color: #023047;
+      color: #ccc;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      padding-inline: 25px;
+    }
+
+    .error { color: red; font-size: .9rem; }
+
+/*carrito*/
+
+    .main-cart {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #023047;
+      color: white;
+    }
+
+    td img {
+      width: 80px;
+      border-radius: 6px;
+    }
+
+    .total {
+      text-align: right;
+      font-weight: bold;
+      padding: 15px;
+      background: #f0f0f0;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 20px auto;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #023047;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .checkout-btn:hover {
+      background-color: #012638;
+    }
+
+/*footer*/
+
+footer{
+  background-color: #023047;
+  color: white;
+}
+
+.tcm-box{
+  display: flex;
+}
+
+ul{
+  list-style: none;
+  padding-bottom: 20px;
+}
+
+li{
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+li img{
+  height: 15px;
+  width: 15px;
+  margin-right: 10px;
+}
+
+
+
+.border-bottom-footer{
+  display: flex;
+}
