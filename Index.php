@@ -1,5 +1,19 @@
 <?php
+// index.php
+session_start();
 include("includes/conexBDD.php");
+
+// 1) Datos de sesión
+$isLoggedIn = isset($_SESSION['ID_Cliente']);
+$userName   = $isLoggedIn ? htmlspecialchars($_SESSION['Nombre']) : 'Invitado';
+$userAvatar = (isset($_SESSION['Foto_Perfil']) && !empty($_SESSION['Foto_Perfil']))
+    ? $_SESSION['Foto_Perfil']
+    : 'https://i.pravatar.cc/40';
+
+// DEBUG TEMPORAL - Mostramos la sesión (puedes eliminar esto después de probar)
+echo "<pre style='color:white;background:black;padding:1em;'>SESSION: ";
+print_r($_SESSION);
+echo "</pre>";
 ?>
 
 <!DOCTYPE html>
@@ -8,195 +22,81 @@ include("includes/conexBDD.php");
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Paquetes de Viajes</title>
-  <style>
-    /* Reset simple */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f0f2f5;
-      color: #333;
-    }
-    header {
-      background-color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: relative;
-    }
-
-    /* Menú de usuario */
-    .user-menu-container {
-      position: relative;
-      cursor: pointer;
-    }
-    .user-avatar img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid #f90;
-    }
-    .user-dropdown {
-      position: absolute;
-      top: 50px;
-      right: 0;
-      background: white;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      width: 180px;
-      display: none;
-      font-size: 14px;
-      color: #555;
-      z-index: 1000;
-    }
-    .user-dropdown p {
-      margin: 10px;
-      font-weight: bold;
-    }
-    .user-dropdown a {
-      display: block;
-      padding: 10px;
-      color: #333;
-      text-decoration: none;
-      border-top: 1px solid #eee;
-    }
-    .user-dropdown a:hover {
-      background: #f90;
-      color: white;
-    }
-
-    /* Paquetes de viajes */
-    main {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-    .package-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease;
-    }
-    .package-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    }
-    .package-image {
-      width: 100%;
-      height: 160px;
-      background: #ddd;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #999;
-      font-size: 18px;
-      font-weight: bold;
-      user-select: none;
-    }
-    .package-content {
-      padding: 15px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .package-title {
-      font-size: 18px;
-      margin: 0 0 10px;
-      color: #222;
-    }
-    .package-description {
-      font-size: 14px;
-      flex-grow: 1;
-      color: #666;
-    }
-    .package-button {
-      margin-top: 15px;
-      background-color: #f90;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      text-align: center;
-    }
-    .package-button:hover {
-      background-color: #e68300;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
+  <div class="extra-image">
+    <img src="LOGO-removebg-preview.png" alt="Logo PaqueViaje" />
+  </div>
+
   <div class="user-menu-container" id="userMenu">
     <div class="user-avatar">
-      <img src="https://i.pravatar.cc/40" alt="User Avatar" />
+      <img src="<?= htmlspecialchars($userAvatar) ?>" alt="Avatar de Usuario" />
     </div>
-   <div class="user-dropdown" id="userDropdown">
-     <p>User Name</p>
-      <a href="#">Profile</a>
-     <a href="#">My Bookings</a>
-     <a href="carrito.php">Carrito</a>
-      <a href="login.php">Login</a>
+    <div class="user-dropdown" id="userDropdown">
+      <p>¡Bienvenido, <?= $userName ?>!</p>
+      <a href="perfil.php">Perfil</a>
+      <a href="ver_mis_reservas.php">Mis Reservas</a>
+      <a href="carrito.php">Carrito</a>
+
+      <?php if (!empty($_SESSION['Jefe_de_Ventas']) && $_SESSION['Jefe_de_Ventas'] == 1): ?>
+        <a href="admin.php">Dashboard</a>
+      <?php endif; ?>
+
+      <?php if ($isLoggedIn): ?>
+        <a href="logout.php">Cerrar sesión</a>
+      <?php else: ?>
+        <a href="login.php">Iniciar sesión</a>
+      <?php endif; ?>
     </div>
   </div>
 </header>
 
-<main>
-  <div class="package-card">
-    <div class="package-image">Placeholder Image</div>
-    <div class="package-content">
-      <h3 class="package-title">Paquete Aventura en la Selva</h3>
-      <p class="package-description">Disfruta de una expedición única explorando la selva tropical con guías expertos y actividades emocionantes.</p>
-      <button class="package-button">Ver detalles</button>
-    </div>
-  </div>
+<main class="main-index">
+  <?php
+  $sql    = "SELECT ID_Producto, Nombre, Descripcion, Precio_Unitario FROM Producto";
+  $result = $connPHP->query($sql);
 
-  <div class="package-card">
-    <div class="package-image">Placeholder Image</div>
-    <div class="package-content">
-      <h3 class="package-title">Escapada a la Playa Paradisiaca</h3>
-      <p class="package-description">Relájate en las playas más hermosas con todo incluido y actividades acuáticas para toda la familia.</p>
-      <button class="package-button">Ver detalles</button>
-    </div>
-  </div>
-
-  <div class="package-card">
-    <div class="package-image">Placeholder Image</div>
-    <div class="package-content">
-      <h3 class="package-title">Tour Cultural por Europa</h3>
-      <p class="package-description">Visita las ciudades más emblemáticas de Europa y sumérgete en su historia, arte y gastronomía.</p>
-      <button class="package-button">Ver detalles</button>
-    </div>
-  </div>
-
-  <div class="package-card">
-    <div class="package-image">Placeholder Image</div>
-    <div class="package-content">
-      <h3 class="package-title">Aventura en la Montaña</h3>
-      <p class="package-description">Escala picos, haz senderismo y disfruta de la naturaleza en su máximo esplendor.</p>
-      <button class="package-button">Ver detalles</button>
-    </div>
-  </div>
+  if ($result && $result->num_rows > 0): 
+    while ($row = $result->fetch_assoc()):
+  ?>
+      <div class="package-card">
+        <div class="package-image">
+          <img
+            src="https://via.placeholder.com/260x160"
+            alt="<?= htmlspecialchars($row['Nombre']) ?>"
+            style="width:100%; height:160px; object-fit:cover;"
+          >
+        </div>
+        <div class="package-content">
+          <h3 class="package-title"><?= htmlspecialchars($row['Nombre']) ?></h3>
+          <p class="package-description">
+            <?= nl2br(htmlspecialchars(mb_strimwidth($row['Descripcion'], 0, 100, '…'))) ?>
+          </p>
+          <p><strong>Precio:</strong> $<?= number_format($row['Precio_Unitario'], 2) ?></p>
+          <a
+            href="detalle_paquete.php?id=<?= $row['ID_Producto'] ?>"
+            class="package-button"
+          >Ver detalles</a>
+        </div>
+      </div>
+  <?php
+    endwhile;
+  else:
+  ?>
+    <p>No hay paquetes disponibles en este momento.</p>
+  <?php endif; ?>
 </main>
 
 <script>
-  const userMenu = document.getElementById('userMenu');
-  const userDropdown = document.getElementById('userDropdown');
+  const userMenu     = document.getElementById('userMenu'),
+        userDropdown = document.getElementById('userDropdown');
 
   userMenu.addEventListener('click', () => {
-    userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+    userDropdown.style.display =
+      userDropdown.style.display === 'block' ? 'none' : 'block';
   });
 
   document.addEventListener('click', (e) => {
@@ -205,6 +105,54 @@ include("includes/conexBDD.php");
     }
   });
 </script>
+
+<footer>
+<div class="border-bottom-footer">
+
+<div class="tcm-box">
+  <ul>
+  <li><h4>Paqueviaje en el mundo</h4></li>
+  <li> <img src="https://static.vecteezy.com/system/resources/previews/011/571/440/non_2x/circle-flag-of-bolivia-free-png.png" alt=""> <p>Vuelos baratos desde Bolivia</p> </li>
+  <li> <img src="https://static.vecteezy.com/system/resources/previews/011/571/494/non_2x/circle-flag-of-argentina-free-png.png" alt=""> <p>Vuelos baratos desde Argentina</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde México</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Chile</p> </li>
+  </ul>
+
+  <ul>
+    <li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Colombia</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Perú</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Brasil</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Uruguay</p> </li>
+  </ul>
+
+  <ul>
+    <li></li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Panamá</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Costa Rica</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde República Dominicana</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Francia</p> </li>
+  </ul>
+  
+  <ul>
+    <li></li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Ecuador</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Paraguay</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde España</p> </li>
+  <li> <img src="" alt=""> <p>Vuelos baratos desde Estados Unidos</p> </li>
+  </ul>
+
+  
+  <ul>
+    <li><h4>Soporte</h4></li>
+    <li><p>Sobre nosotros</p></li>
+    <li><p>Contacto</p></li>
+    <li><p>Preguntas frecuentes</p></li>
+  </ul>
+</div>
+
+</div>
+</footer>
 
 </body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-06-2025 a las 21:56:39
+-- Tiempo de generación: 17-06-2025 a las 22:22:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -43,7 +43,31 @@ CREATE TABLE `carrito` (
 INSERT INTO `carrito` (`ID_Carrito`, `Estado`, `Total_Pagar`, `ID_Cliente`) VALUES
 (1, 'Pendiente', 1500.00, 2),
 (2, 'Pendiente', 2200.00, 5),
-(3, 'Pendiente', 3200.00, 9);
+(3, 'Pendiente', 3200.00, 9),
+(4, 'Pendiente', 17200.00, 14);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `carrito_item`
+--
+
+CREATE TABLE `carrito_item` (
+  `ID_Item` int(11) NOT NULL,
+  `ID_Carrito` int(11) NOT NULL,
+  `ID_Producto` int(11) NOT NULL,
+  `Cantidad` int(11) NOT NULL DEFAULT 1,
+  `Subtotal` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrito_item`
+--
+
+INSERT INTO `carrito_item` (`ID_Item`, `ID_Carrito`, `ID_Producto`, `Cantidad`, `Subtotal`) VALUES
+(34, 4, 2, 1, 3200.00),
+(35, 4, 1, 2, 3000.00),
+(36, 4, 3, 5, 11000.00);
 
 -- --------------------------------------------------------
 
@@ -55,25 +79,29 @@ CREATE TABLE `cliente` (
   `ID_Cliente` int(11) NOT NULL,
   `Nombre` varchar(45) NOT NULL,
   `Email` varchar(45) NOT NULL,
-  `Contraseña` varchar(45) NOT NULL,
-  `Historial_Compras` text NOT NULL
+  `Contraseña` varchar(255) NOT NULL,
+  `Historial_Compras` text NOT NULL,
+  `Jefe_de_Ventas` tinyint(1) NOT NULL,
+  `Foto_Perfil` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `cliente`
 --
 
-INSERT INTO `cliente` (`ID_Cliente`, `Nombre`, `Email`, `Contraseña`, `Historial_Compras`) VALUES
-(1, 'Carlos Pérez', 'carlos.perez@example.com', 'clave123', '[]'),
-(2, 'María López', 'maria.lopez@example.com', 'mypass2024', '[]'),
-(3, 'José Ramírez', 'jose.ramirez@example.com', 'contraseña1', '[]'),
-(4, 'Lucía Fernández', 'lucia.fernandez@example.com', 'lucia2025', '[]'),
-(5, 'Andrés Gómez', 'andres.gomez@example.com', 'andrespass', '[]'),
-(6, 'Laura Morales', 'laura.morales@example.com', 'laura2023', '[]'),
-(7, 'Juan Castillo', 'juan.castillo@example.com', 'juanc123', '[]'),
-(8, 'Ana Torres', 'ana.torres@example.com', 'ana_secure', '[]'),
-(9, 'Pedro Díaz', 'pedro.diaz@example.com', 'p3dr0diaz', '[]'),
-(10, 'Sofía Herrera', 'sofia.herrera@example.com', 'sofiaH!2025', '[]');
+INSERT INTO `cliente` (`ID_Cliente`, `Nombre`, `Email`, `Contraseña`, `Historial_Compras`, `Jefe_de_Ventas`, `Foto_Perfil`) VALUES
+(1, 'Carlos Pérez', 'carlos.perez@example.com', 'clave123', '[]', 0, NULL),
+(2, 'María López', 'maria.lopez@example.com', 'mypass2024', '[]', 0, NULL),
+(3, 'José Ramírez', 'jose.ramirez@example.com', 'contraseña1', '[]', 0, NULL),
+(4, 'Lucía Fernández', 'lucia.fernandez@example.com', 'lucia2025', '[]', 0, NULL),
+(5, 'Andrés Gómez', 'andres.gomez@example.com', 'andrespass', '[]', 0, NULL),
+(6, 'Laura Morales', 'laura.morales@example.com', 'laura2023', '[]', 0, NULL),
+(7, 'Juan Castillo', 'juan.castillo@example.com', 'juanc123', '[]', 0, NULL),
+(8, 'Ana Torres', 'ana.torres@example.com', 'ana_secure', '[]', 0, NULL),
+(9, 'Pedro Díaz', 'pedro.diaz@example.com', 'p3dr0diaz', '[]', 0, NULL),
+(10, 'Sofía Herrera', 'sofia.herrera@example.com', 'sofiaH!2025', '[]', 0, NULL),
+(13, 'pepe', 'pepe@gmail.com', '$2y$10$P6yA2F5H6/zG.clvN2ZUK.QL0EM0UD5VCyEp7OO7tHUQ9WYiB6AE2', '', 0, NULL),
+(14, 'Manolo', 'manolo@gmail.com', '$2y$10$uGpa6Fh8xbPks7LVaM0heej9.t2zTWhjJauhc7v5eMYNuUZa.CzxS', '', 1, 'uploads/perfil_14_1750188507.jpg');
 
 -- --------------------------------------------------------
 
@@ -212,6 +240,53 @@ INSERT INTO `producto` (`ID_Producto`, `Nombre`, `Descripcion`, `Precio_Unitario
 (4, 'Crucero Caribeño', 'Vuelo a puerto + Crucero 7 noches + Excursiones', 2800.00),
 (5, 'Aventura en Perú', 'Vuelo + Hotel + Excursiones guiadas por Cusco y Machu Picchu', 1900.00);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `venta`
+--
+
+CREATE TABLE `venta` (
+  `ID_Venta` int(11) NOT NULL,
+  `ID_Cliente` int(11) NOT NULL,
+  `Fecha` datetime DEFAULT current_timestamp(),
+  `Total` decimal(10,2) NOT NULL,
+  `Estado` enum('Confirmada','Cancelada') DEFAULT 'Confirmada'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `venta`
+--
+
+INSERT INTO `venta` (`ID_Venta`, `ID_Cliente`, `Fecha`, `Total`, `Estado`) VALUES
+(1, 14, '2025-06-17 16:15:32', 19400.00, 'Confirmada'),
+(2, 14, '2025-06-17 16:30:51', 3000.00, 'Confirmada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `venta_item`
+--
+
+CREATE TABLE `venta_item` (
+  `ID_Item` int(11) NOT NULL,
+  `ID_Venta` int(11) NOT NULL,
+  `ID_Producto` int(11) NOT NULL,
+  `Cantidad` int(11) NOT NULL,
+  `Precio_Unitario` decimal(10,2) NOT NULL,
+  `Subtotal` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `venta_item`
+--
+
+INSERT INTO `venta_item` (`ID_Item`, `ID_Venta`, `ID_Producto`, `Cantidad`, `Precio_Unitario`, `Subtotal`) VALUES
+(1, 1, 2, 1, 3200.00, 3200.00),
+(2, 1, 1, 2, 1500.00, 3000.00),
+(3, 1, 3, 6, 2200.00, 13200.00),
+(4, 2, 1, 2, 1500.00, 3000.00);
+
 --
 -- Índices para tablas volcadas
 --
@@ -222,6 +297,14 @@ INSERT INTO `producto` (`ID_Producto`, `Nombre`, `Descripcion`, `Precio_Unitario
 ALTER TABLE `carrito`
   ADD PRIMARY KEY (`ID_Carrito`),
   ADD KEY `fk_carrito_cliente` (`ID_Cliente`);
+
+--
+-- Indices de la tabla `carrito_item`
+--
+ALTER TABLE `carrito_item`
+  ADD PRIMARY KEY (`ID_Item`),
+  ADD KEY `ID_Carrito` (`ID_Carrito`),
+  ADD KEY `ID_Producto` (`ID_Producto`);
 
 --
 -- Indices de la tabla `cliente`
@@ -265,6 +348,21 @@ ALTER TABLE `producto`
   ADD PRIMARY KEY (`ID_Producto`);
 
 --
+-- Indices de la tabla `venta`
+--
+ALTER TABLE `venta`
+  ADD PRIMARY KEY (`ID_Venta`),
+  ADD KEY `ID_Cliente` (`ID_Cliente`);
+
+--
+-- Indices de la tabla `venta_item`
+--
+ALTER TABLE `venta_item`
+  ADD PRIMARY KEY (`ID_Item`),
+  ADD KEY `ID_Venta` (`ID_Venta`),
+  ADD KEY `ID_Producto` (`ID_Producto`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -272,13 +370,19 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `carrito`
 --
 ALTER TABLE `carrito`
-  MODIFY `ID_Carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `carrito_item`
+--
+ALTER TABLE `carrito_item`
+  MODIFY `ID_Item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `ID_Cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID_Cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_pedido`
@@ -299,6 +403,18 @@ ALTER TABLE `producto`
   MODIFY `ID_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `venta`
+--
+ALTER TABLE `venta`
+  MODIFY `ID_Venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `venta_item`
+--
+ALTER TABLE `venta_item`
+  MODIFY `ID_Item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -307,6 +423,13 @@ ALTER TABLE `producto`
 --
 ALTER TABLE `carrito`
   ADD CONSTRAINT `fk_carrito_cliente` FOREIGN KEY (`ID_Cliente`) REFERENCES `cliente` (`ID_Cliente`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `carrito_item`
+--
+ALTER TABLE `carrito_item`
+  ADD CONSTRAINT `carrito_item_ibfk_1` FOREIGN KEY (`ID_Carrito`) REFERENCES `carrito` (`ID_Carrito`),
+  ADD CONSTRAINT `carrito_item_ibfk_2` FOREIGN KEY (`ID_Producto`) REFERENCES `producto` (`ID_Producto`);
 
 --
 -- Filtros para la tabla `detalle_pedido`
@@ -334,6 +457,19 @@ ALTER TABLE `notificacion`
 --
 ALTER TABLE `pedido`
   ADD CONSTRAINT `fk_cliente_pedido` FOREIGN KEY (`ID_Cliente`) REFERENCES `cliente` (`ID_Cliente`);
+
+--
+-- Filtros para la tabla `venta`
+--
+ALTER TABLE `venta`
+  ADD CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`ID_Cliente`) REFERENCES `cliente` (`ID_Cliente`);
+
+--
+-- Filtros para la tabla `venta_item`
+--
+ALTER TABLE `venta_item`
+  ADD CONSTRAINT `venta_item_ibfk_1` FOREIGN KEY (`ID_Venta`) REFERENCES `venta` (`ID_Venta`),
+  ADD CONSTRAINT `venta_item_ibfk_2` FOREIGN KEY (`ID_Producto`) REFERENCES `producto` (`ID_Producto`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
